@@ -1,9 +1,14 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 
+# =======================
+# App setup
+# =======================
 app = Flask(__name__)
+CORS(app)  # ✅ THIS WAS MISSING — VERY IMPORTANT
 
 # =======================
 # Load models
@@ -32,11 +37,14 @@ def predict_lung():
     image = Image.open(request.files["file"]).convert("RGB")
     img = preprocess_image(image)
 
-    prediction = lung_model.predict(img)
-    confidence = float(np.max(prediction))
+    prediction = lung_model.predict(img)[0][0]  # probability of pneumonia
 
-    return jsonify({"confidence": confidence})
+    label = "Pneumonia Detected" if prediction >= 0.5 else "No Pneumonia Detected"
 
+    return jsonify({
+    "confidence": float(prediction),
+    "label": label
+})
 # =======================
 # BONES (Fracture)
 # =======================
@@ -73,4 +81,4 @@ def predict_kidney():
 # Run app
 # =======================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
