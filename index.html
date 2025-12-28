@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arogya AI Assistant</title>
+
+    <!-- Dialogflow Messenger SDK -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+    <style>
+      df-messenger {
+        --df-messenger-bot-message: #1e1e1e;
+        --df-messenger-user-message: #0066ff;
+        --df-messenger-font-color: #ffffff;
+        --df-messenger-chat-background: #0f0f0f;
+        --df-messenger-send-icon: #00aaff;
+        --df-messenger-input-box-color: #1b1b1b;
+        --df-messenger-input-font-color: white;
+        --df-messenger-titlebar-color: #00c6ff;
+        --df-messenger-title-font-color: black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- THIS LINE WAS MISSING (React App Loader) -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
