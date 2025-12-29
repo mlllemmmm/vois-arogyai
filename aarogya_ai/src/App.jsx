@@ -1,56 +1,126 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Quiz from "./components/Quiz";
+import "./styles/quiz.css";
+import cutuImg from "./assets/cutu.png";
+import MentalHealth from "./pages/MentalHealth";
 
-/* ---------------- DASHBOARD DATA ---------------- */
-const cards = [
-  { title: "AI Chatbot", body: "Instant guidance, symptom Q&A.", icon: "💬", path: "/chat" },
-  { title: "X-ray Upload", body: "Securely upload imaging files.", icon: "🩻", path: "/xray" },
-  { title: "Risk Analysis", body: "Insights to flag potential health risks.", icon: "📊", path: "/risk" }
-];
 
-/* ---------------- HOME PAGE ---------------- */
+/* ================= NAVBAR ================= */
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <Link to="/" className="nav-logo">
+        Aarogya AI
+      </Link>
+
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/xray">X-Ray</Link>
+        <Link to="/risk">Risk</Link>
+        <Link to="/mental-health">Mental Health</Link>
+      </div>
+
+    </nav>
+  );
+}
+
+/* ================= HOME PAGE ================= */
 function HomePage() {
   return (
     <section className="hero">
-      <h1>All-in-one health assistant.</h1>
-      <div className="grid">
-        {cards.map((card) => (
-          <div key={card.title} className="card">
-            <h3>{card.title}</h3>
-            <p>{card.body}</p>
-            <Link to={card.path} className="btn">
-              <span className="icon">{card.icon}</span>
-              <span>Open {card.title}</span>
-            </Link>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ flex: 1, minWidth: "250px" }}>
+          <h1>All-in-one health assistant.</h1>
+
+          <div className="project-desc-container">
+            <p className="project-desc">
+              Aarogya AI is a preventive healthcare platform that combines
+              AI-powered X-ray analysis, lifestyle-based chronic disease risk
+              detection, and an intelligent health chatbot into one unified
+              system.
+            </p>
+            <div className="hackathon-badge">
+              🚀 Hackathon Prototype • AI-powered Preventive Healthcare
+            </div>
           </div>
-        ))}
+
+          <p
+            style={{
+              color: "#53d8fb",
+              marginTop: "10px",
+              fontWeight: "500",
+            }}
+          >
+            Built for early detection, accessibility, and preventive healthcare.
+          </p>
+        </div>
+
+        <div style={{ flex: 1, minWidth: "200px", textAlign: "center" }}>
+          <img
+            src={cutuImg}
+            alt="Health Illustration"
+            style={{
+              width: "70%",
+              maxWidth: "280px",
+              borderRadius: "12px",
+            }}
+          />
+        </div>
       </div>
+
+      {/* FEATURE INFO CARDS (NOT CLICKABLE) */}
+      <div className="features info-cards">
+        <div className="feature-card">
+          <span className="feature-icon">🩻</span>
+          <h3>X-Ray Analysis</h3>
+          <p>
+            Upload medical X-ray images such as lungs, bones, or kidney scans and
+            receive AI-assisted preliminary analysis highlighting potential
+            abnormalities with confidence-based assessment.
+          </p>
+        </div>
+
+        <div className="feature-card">
+          <span className="feature-icon">📊</span>
+          <h3>Chronic Disease Risk Detection</h3>
+          <p>
+            A lifestyle and health-based questionnaire powered by machine
+            learning to predict the risk of chronic conditions like diabetes and
+            heart disease, encouraging early preventive action.
+          </p>
+        </div>
+
+        <div className="feature-card">
+          <span className="feature-icon">💬</span>
+          <h3>Health Chatbot</h3>
+          <p>
+            An intelligent AI chatbot that provides instant guidance for common
+            health concerns, symptom understanding, and general preventive-care
+            advice in a conversational manner.
+          </p>
+        </div>
+      </div>
+
+      {/* CHATBOT */}
+      <df-messenger
+        intent="WELCOME"
+        chat-title="arogyai"
+        agent-id="22591bdc-f998-476e-81c4-af92f6f54692"
+        language-code="en"
+      ></df-messenger>
     </section>
   );
 }
 
-/* ---------------- CHAT PAGE ---------------- */
-function ChatPage() {
-  return (
-    <div className="page-container">
-      <Link to="/" className="back-link">← Back to Dashboard</Link>
-      <h2>AI Assistant</h2>
-      <div style={{
-        marginTop: "40px",
-        border: "1px dashed #333",
-        borderRadius: "12px",
-        height: "200px",
-        display: "grid",
-        placeItems: "center",
-        color: "#53d8fb"
-      }}>
-        [ Chat Interface Placeholder ]
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- XRAY PAGE ---------------- */
+/* ================= XRAY PAGE ================= */
 function XrayPage() {
   const [selectedArea, setSelectedArea] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -59,22 +129,18 @@ function XrayPage() {
 
   const fileInputRef = useRef(null);
 
-  // Map selected area to backend endpoint
   const getEndpoint = () => {
-    if (selectedArea === "Lungs") return "/predict/lung";
-    if (selectedArea === "Bones") return "/predict/bones";
-    if (selectedArea === "Kidney") return "/predict/kidney";
-    return null; // Teeth not connected yet
+    if (selectedArea === "Lungs") return "/predict/xray/lung";
+    if (selectedArea === "Bones") return "/predict/xray/bones";
+    if (selectedArea === "Kidney") return "/predict/xray/kidney";
+    return null;
   };
 
   const handlePredict = async () => {
     if (!selectedFile || !selectedArea) return;
 
     const endpoint = getEndpoint();
-    if (!endpoint) {
-      alert("Model for this selection is not available yet.");
-      return;
-    }
+    if (!endpoint) return;
 
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -83,41 +149,27 @@ function XrayPage() {
       setLoading(true);
       setResult(null);
 
-      const response = await fetch(
-        `http://127.0.0.1:5000${endpoint}`,
-        {
-          method: "POST",
-          body: formData
-        }
-      );
+      const response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await response.json();
-      const confidence = data.confidence;
 
-      // -----------------------------
-      // MEDICALLY SAFE INTERPRETATION
-      // -----------------------------
-      let assessment;
-      let color;
-
-      if (confidence >= 0.75) {
-        assessment = "High likelihood of Pneumonia";
+      let assessment, color;
+      if (data.confidence >= 0.75) {
+        assessment = "High likelihood of abnormality detected";
         color = "#ff6b6b";
-      } else if (confidence >= 0.4) {
-        assessment =
-          "Inconclusive – Further medical evaluation recommended";
+      } else if (data.confidence >= 0.4) {
+        assessment = "Inconclusive — further evaluation recommended";
         color = "#facc15";
       } else {
-        assessment = "No significant signs of Pneumonia";
+        assessment = "No significant abnormality detected";
         color = "#4ade80";
       }
 
-      setResult({
-        confidence,
-        assessment,
-        color
-      });
-    } catch (error) {
+      setResult({ confidence: data.confidence, assessment, color });
+    } catch {
       alert("Backend connection failed. Is Flask running?");
     } finally {
       setLoading(false);
@@ -126,42 +178,17 @@ function XrayPage() {
 
   return (
     <div className="page-container">
-      <Link to="/" className="back-link">← Back to Dashboard</Link>
       <h2>X-Ray Upload</h2>
 
-      <p style={{ color: "#9ca7c2" }}>Select the area of scan:</p>
-
-      {/* AREA SELECTION */}
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          marginBottom: "25px",
-          flexWrap: "wrap"
-        }}
-      >
-        {["Teeth", "Kidney", "Lungs", "Bones"].map((area) => (
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        {["Kidney", "Lungs", "Bones"].map((area) => (
           <button
             key={area}
-            className="btn"
+            className={`btn ${selectedArea === area ? "btn-active" : ""}`}
             onClick={() => {
               setSelectedArea(area);
               setSelectedFile(null);
               setResult(null);
-            }}
-            style={{
-              borderColor:
-                selectedArea === area
-                  ? "#53d8fb"
-                  : "rgba(255,255,255,0.12)",
-              background:
-                selectedArea === area
-                  ? "rgba(83,216,251,0.15)"
-                  : "transparent",
-              color:
-                selectedArea === area
-                  ? "#53d8fb"
-                  : "inherit"
             }}
           >
             {area}
@@ -169,77 +196,35 @@ function XrayPage() {
         ))}
       </div>
 
-      <p style={{ color: "#9ca7c2" }}>
-        {selectedArea
-          ? `Upload ${selectedArea} X-Ray image below.`
-          : "Select an area above to enable upload."}
-      </p>
-
-      {/* FILE INPUT */}
       <input
         type="file"
         accept="image/*"
         ref={fileInputRef}
-        style={{ display: "none" }}
+        hidden
         onChange={(e) => setSelectedFile(e.target.files[0])}
       />
 
-      {/* UPLOAD + SCAN */}
-      <div
-        style={{
-          marginTop: "15px",
-          height: "180px",
-          border: "1px dashed rgba(255,255,255,0.1)",
-          borderRadius: "12px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "12px"
-        }}
+      <button className="btn" onClick={() => fileInputRef.current.click()}>
+        Select X-Ray Image
+      </button>
+
+      {selectedFile && <p>{selectedFile.name}</p>}
+
+      <button
+        className="btn"
+        disabled={!selectedFile || !selectedArea || loading}
+        onClick={handlePredict}
       >
-        <button
-          className="btn"
-          disabled={!selectedArea}
-          onClick={() => fileInputRef.current.click()}
-        >
-          Select File {selectedArea ? `for ${selectedArea}` : ""}
-        </button>
+        {loading ? "Scanning..." : "Scan X-Ray"}
+      </button>
 
-        {selectedFile && (
-          <span style={{ fontSize: "14px", color: "#53d8fb" }}>
-            {selectedFile.name}
-          </span>
-        )}
-
-        <button
-          className="btn"
-          disabled={!selectedFile || loading}
-          onClick={handlePredict}
-        >
-          {loading ? "Scanning..." : "Scan X-Ray"}
-        </button>
-      </div>
-
-      {/* RESULT */}
       {result && (
         <div style={{ marginTop: "20px" }}>
           <p style={{ color: result.color }}>
             <b>Assessment:</b> {result.assessment}
           </p>
-          <p style={{ color: "#53d8fb" }}>
-            <b>Confidence:</b>{" "}
-            {(result.confidence * 100).toFixed(2)}%
-          </p>
-          <p
-            style={{
-              fontSize: "12px",
-              color: "#9ca7c2",
-              marginTop: "8px"
-            }}
-          >
-            This result is generated by an AI model and is not a medical
-            diagnosis. Please consult a qualified doctor.
+          <p>
+            <b>Confidence:</b> {(result.confidence * 100).toFixed(2)}%
           </p>
         </div>
       )}
@@ -247,44 +232,26 @@ function XrayPage() {
   );
 }
 
-
-
-/* ---------------- RISK PAGE ---------------- */
+/* ================= RISK PAGE ================= */
 function RiskPage() {
   return (
     <div className="page-container">
-      <Link to="/" className="back-link">← Back to Dashboard</Link>
-      <h2>Risk Analysis</h2>
-      <ul style={{ marginTop: "20px", lineHeight: "2" }}>
-        <li>• Heart Rate: <strong>Normal</strong></li>
-        <li>• Blood Pressure: <strong>Elevated</strong></li>
-        <li>• Sleep Pattern: <strong>Irregular</strong></li>
-      </ul>
+      <Quiz />
     </div>
   );
 }
 
-/* ---------------- APP ROOT ---------------- */
-function App() {
+/* ================= APP ROOT ================= */
+export default function App() {
   return (
     <BrowserRouter>
-      <div className="shell">
-        <header>
-          <Link to="/" className="logo">
-            <div className="logo-circle">Rx</div>
-            <span>Aarogya AI</span>
-          </Link>
-        </header>
-
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/xray" element={<XrayPage />} />
-          <Route path="/risk" element={<RiskPage />} />
-        </Routes>
-      </div>
+      <Navbar />
+     <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/xray" element={<XrayPage />} />
+      <Route path="/risk" element={<RiskPage />} />
+      <Route path="/mental-health" element={<MentalHealth />} />
+    </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;
