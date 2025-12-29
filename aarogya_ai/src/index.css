@@ -60,36 +60,35 @@ a { text-decoration: none; color: inherit; }
 
 /* 5. Hero Section */
 .hero {
-  text-align: center;      /* Centers the text */
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;     /* Centers the content blocks horizontally */
+  align-items: center;
 }
 
 .hero h1 {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   margin: 0 0 16px;
-  background: linear-gradient(to bottom right, #8d51ee, #2a4ce4); /* Adjusted gradient angle */
+  background: linear-gradient(to bottom right, #8d51ee, #2a4ce4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
 }
 
 .lead {
-  font-size: 1.1rem; 
+  font-size: 1.1rem;
   color: var(--text-muted);
-  max-width: 600px; 
-  line-height: 1.6; 
+  max-width: 600px;
+  line-height: 1.6;
   margin-bottom: 40px;
-  /* These two lines force the paragraph block to be centered */
-  margin-left: auto; 
+  margin-left: auto;
   margin-right: auto;
 }
 
 /* 6. Card Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* <-- Forces 3 equal columns on one line */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -125,7 +124,7 @@ a { text-decoration: none; color: inherit; }
 }
 .icon { font-size: 1.2rem; }
 
-/* 8. Inner Pages (Chat, Xray, etc) */
+/* 8. Inner Pages */
 .page-container {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -151,4 +150,17 @@ footer a:hover { color: var(--accent-cyan); text-decoration: underline; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------- */
+/* 10. Dialogflow Messenger Overrides  (FIXES INPUT BOX) */
+/* ----------------------------------------------------- */
+
+df-messenger {
+  --df-messenger-input-box-color: #ffffff !important;         /* White input */
+  --df-messenger-input-font-color: #000000 !important;        /* Black text */
+  --df-messenger-input-placeholder-font-color: #555 !important;
+  --df-messenger-send-icon: #53d8fb !important;               /* Cyan arrow */
+  --df-messenger-message-bot-background: #1a1a1a !important;
+  --df-messenger-message-user-background: #2a4ce4 !important;
 }
