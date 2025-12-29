@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Python
+__pycache__/
+*.pyc
+
+# ML models
+*.h5
+*.keras
+
+# Node
+node_modules/
+
+# Env
+.env
+
+# OS
+.DS_Store
