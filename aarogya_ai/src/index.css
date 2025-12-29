@@ -164,3 +164,52 @@ df-messenger {
   --df-messenger-message-bot-background: #1a1a1a !important;
   --df-messenger-message-user-background: #2a4ce4 !important;
 }
+
+/* ================= BIG CTA BUTTONS ================= */
+
+.btn-primary {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  color: #0f172a;
+  background: linear-gradient(135deg, #53d8fb, #7c7cff);
+  box-shadow: 0 0 25px rgba(83, 216, 251, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 40px rgba(83, 216, 251, 0.55);
+}
+
+/* Listening animation */
+.btn-listening {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #022c22;
+  box-shadow: 0 0 35px rgba(74, 222, 128, 0.6);
+}
+
+/* ================= THERAPIST BUTTON ================= */
+
+.btn-secondary {
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+

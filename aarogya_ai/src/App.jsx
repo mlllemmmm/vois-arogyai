@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Quiz from "./components/Quiz";
 import "./styles/quiz.css";
 import cutuImg from "./assets/cutu.png";
+import MentalHealth from "./pages/MentalHealth";
+
 
 /* ================= NAVBAR ================= */
 function Navbar() {
@@ -16,7 +18,9 @@ function Navbar() {
         <Link to="/">Home</Link>
         <Link to="/xray">X-Ray</Link>
         <Link to="/risk">Risk</Link>
+        <Link to="/mental-health">Mental Health</Link>
       </div>
+
     </nav>
   );
 }
@@ -242,11 +246,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/xray" element={<XrayPage />} />
-        <Route path="/risk" element={<RiskPage />} />
-      </Routes>
+     <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/xray" element={<XrayPage />} />
+      <Route path="/risk" element={<RiskPage />} />
+      <Route path="/mental-health" element={<MentalHealth />} />
+    </Routes>
     </BrowserRouter>
   );
 }
