@@ -4,26 +4,57 @@ import Quiz from "./components/Quiz";
 import "./styles/quiz.css";
 import cutuImg from "./assets/cutu.png";
 
+/* ================= NAVBAR ================= */
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <Link to="/" className="nav-logo">
+        Aarogya AI
+      </Link>
+
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/xray">X-Ray</Link>
+        <Link to="/risk">Risk</Link>
+      </div>
+    </nav>
+  );
+}
+
 /* ================= HOME PAGE ================= */
 function HomePage() {
   return (
     <section className="hero">
-      <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+          flexWrap: "wrap",
+        }}
+      >
         <div style={{ flex: 1, minWidth: "250px" }}>
           <h1>All-in-one health assistant.</h1>
 
           <div className="project-desc-container">
             <p className="project-desc">
-              Aarogya AI is a preventive healthcare platform that combines AI-powered
-              X-ray analysis, lifestyle-based chronic disease risk detection, and an
-              intelligent health chatbot into one unified system.
+              Aarogya AI is a preventive healthcare platform that combines
+              AI-powered X-ray analysis, lifestyle-based chronic disease risk
+              detection, and an intelligent health chatbot into one unified
+              system.
             </p>
             <div className="hackathon-badge">
               🚀 Hackathon Prototype • AI-powered Preventive Healthcare
             </div>
           </div>
 
-          <p style={{ color: "#53d8fb", marginTop: "10px", fontWeight: "500" }}>
+          <p
+            style={{
+              color: "#53d8fb",
+              marginTop: "10px",
+              fontWeight: "500",
+            }}
+          >
             Built for early detection, accessibility, and preventive healthcare.
           </p>
         </div>
@@ -32,37 +63,45 @@ function HomePage() {
           <img
             src={cutuImg}
             alt="Health Illustration"
-            style={{ width: "70%", maxWidth: "280px", borderRadius: "12px" }}
+            style={{
+              width: "70%",
+              maxWidth: "280px",
+              borderRadius: "12px",
+            }}
           />
         </div>
       </div>
 
-      {/* FEATURE CARDS */}
+      {/* FEATURE INFO CARDS (NOT CLICKABLE) */}
       <div className="features info-cards">
-        <Link to="/xray" className="feature-card clickable">
+        <div className="feature-card">
           <span className="feature-icon">🩻</span>
           <h3>X-Ray Analysis</h3>
-          <p>AI-assisted analysis of medical X-ray images.</p>
-          <span className="cta-text">Start X-Ray Analysis →</span>
-        </Link>
+          <p>
+            Upload medical X-ray images such as lungs, bones, or kidney scans and
+            receive AI-assisted preliminary analysis highlighting potential
+            abnormalities with confidence-based assessment.
+          </p>
+        </div>
 
-        <Link to="/risk" className="feature-card clickable">
+        <div className="feature-card">
           <span className="feature-icon">📊</span>
           <h3>Chronic Disease Risk Detection</h3>
-          <p>Lifestyle-based ML risk assessment.</p>
-          <span className="cta-text">Check Risk →</span>
-        </Link>
+          <p>
+            A lifestyle and health-based questionnaire powered by machine
+            learning to predict the risk of chronic conditions like diabetes and
+            heart disease, encouraging early preventive action.
+          </p>
+        </div>
 
-        <div
-          className="feature-card clickable chatbot-card"
-          onClick={() =>
-            document.querySelector("df-messenger")?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
+        <div className="feature-card">
           <span className="feature-icon">💬</span>
           <h3>Health Chatbot</h3>
-          <p>Instant AI guidance for common health concerns.</p>
-          <span className="cta-text">Chat with AI →</span>
+          <p>
+            An intelligent AI chatbot that provides instant guidance for common
+            health concerns, symptom understanding, and general preventive-care
+            advice in a conversational manner.
+          </p>
         </div>
       </div>
 
@@ -135,14 +174,13 @@ function XrayPage() {
 
   return (
     <div className="page-container">
-      <Link to="/" className="back-link">← Back to Dashboard</Link>
       <h2>X-Ray Upload</h2>
 
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         {["Kidney", "Lungs", "Bones"].map((area) => (
           <button
             key={area}
-            className="btn"
+            className={`btn ${selectedArea === area ? "btn-active" : ""}`}
             onClick={() => {
               setSelectedArea(area);
               setSelectedFile(null);
@@ -168,7 +206,11 @@ function XrayPage() {
 
       {selectedFile && <p>{selectedFile.name}</p>}
 
-      <button className="btn" disabled={!selectedFile || loading} onClick={handlePredict}>
+      <button
+        className="btn"
+        disabled={!selectedFile || !selectedArea || loading}
+        onClick={handlePredict}
+      >
         {loading ? "Scanning..." : "Scan X-Ray"}
       </button>
 
@@ -177,7 +219,9 @@ function XrayPage() {
           <p style={{ color: result.color }}>
             <b>Assessment:</b> {result.assessment}
           </p>
-          <p><b>Confidence:</b> {(result.confidence * 100).toFixed(2)}%</p>
+          <p>
+            <b>Confidence:</b> {(result.confidence * 100).toFixed(2)}%
+          </p>
         </div>
       )}
     </div>
@@ -188,7 +232,6 @@ function XrayPage() {
 function RiskPage() {
   return (
     <div className="page-container">
-      <Link to="/" className="back-link">← Back to Dashboard</Link>
       <Quiz />
     </div>
   );
@@ -198,20 +241,12 @@ function RiskPage() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="shell">
-        <header>
-          <Link to="/" className="logo">
-            <div className="logo-circle">Rx</div>
-            <span>Aarogya AI</span>
-          </Link>
-        </header>
-
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/xray" element={<XrayPage />} />
-          <Route path="/risk" element={<RiskPage />} />
-        </Routes>
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/xray" element={<XrayPage />} />
+        <Route path="/risk" element={<RiskPage />} />
+      </Routes>
     </BrowserRouter>
   );
 }
